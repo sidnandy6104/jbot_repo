@@ -1,10 +1,26 @@
 import discord
 import os
 import random
+from dotenv import load_dotenv
 
-goon_choices = ["Keep on Gooning!", "Goon Mode: Activated!", "Stay Goon-tastic!", "Goon Vibes Only!", "Goon On, Friend!", "Goofy Gooning Ahead!", "Goon Patrol, Assemble!", "Gooning All the Way!", "Goon Dreams Await!", "Goon Squad, Unite!", "May the Goon Be with You!", "Live, Laugh, Goon!"]
+# load .env into os.environ
+load_dotenv()  
+
+# now read them
+TOKEN       = os.getenv("DISCORD_TOKEN")
+IMAGE_FOLDER = os.getenv("IMAGE_FOLDER")
+
+if not TOKEN or not IMAGE_FOLDER:
+    raise RuntimeError("Missing DISCORD_TOKEN or IMAGE_FOLDER in environment")
+
+goon_choices = [
+    "Keep on Gooning!", "Goon Mode: Activated!", "...",
+]
+
 def get_image():
-    folder = r"C:\Users\nandy\Desktop\Brother Pictures s25"
+    # read the folder path from env
+    folder = IMAGE_FOLDER
+
     images = [
         os.path.join(folder, fn)
         for fn in os.listdir(folder)
@@ -30,7 +46,6 @@ class MyClient(discord.Client):
 intents = discord.Intents.default()
 intents.message_content = True
 
+# finally, run with the loaded token
 client = MyClient(intents=intents)
-key = ''
-client.run(key)
-print(random.choice(images))
+client.run(TOKEN)
